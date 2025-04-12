@@ -3,285 +3,293 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dev Scan Security | Sicurezza Web e Conformità NIS2</title>
+  <title>Dev Scan Security | Scanner Sicurezza Web</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    .hero {
       background-color: #f8f9fa;
-      padding: 80px 0;
     }
-    .feature-card {
-      border: 1px solid #eee;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 20px;
-      transition: transform 0.3s;
+    .scanner-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-top: 2rem;
     }
-    .feature-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    .result-card {
+      margin-top: 1.5rem;
+      border-left: 4px solid #3b82f6;
+      padding: 1rem;
+      background-color: #f0f7ff;
+    }
+    .vulnerability-item {
+      border-bottom: 1px solid #eee;
+      padding: 1rem 0;
+    }
+    .vulnerability-item:last-child {
+      border-bottom: none;
+    }
+    .severity-high {
+      color: #dc3545;
+    }
+    .severity-medium {
+      color: #fd7e14;
+    }
+    .severity-low {
+      color: #0dcaf0;
+    }
+    .score-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background-color: #f8f9fa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      font-size: 2rem;
+      font-weight: bold;
+      border: 6px solid;
+    }
+    .score-good {
+      border-color: #198754;
+      color: #198754;
+    }
+    .score-medium {
+      border-color: #fd7e14;
+      color: #fd7e14;
+    }
+    .score-bad {
+      border-color: #dc3545;
+      color: #dc3545;
+    }
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+    .spinner-border {
+      width: 3rem;
+      height: 3rem;
     }
   </style>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
     <div class="container">
-      <a class="navbar-brand" href="#" id="home-link">Dev Scan Security</a>
+      <a class="navbar-brand" href="#">Dev Scan Security</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="#features" id="features-link">Funzionalità</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#pricing" id="pricing-link">Prezzi</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#about" id="about-link">Chi Siamo</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#contact" id="contact-link">Contatti</a>
-          </li>
-        </ul>
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="btn btn-primary" href="#login" id="login-link">Accedi</a>
+            <a class="nav-link active" href="#">Scanner</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Report</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Conformità NIS2</a>
           </li>
         </ul>
       </div>
     </div>
   </nav>
 
-  <div id="app">
-    <!-- Home Page -->
-    <div id="home-page" class="page active">
-      <section class="hero">
-        <div class="container text-center">
-          <h1 class="display-4">Sicurezza Web e Conformità NIS2<br>in un'unica piattaforma</h1>
-          <p class="lead my-4">Scansiona il tuo sito web per vulnerabilità di sicurezza, ottieni consigli basati su AI e assicura la conformità NIS2 con Dev Scan Security.</p>
-          <div class="d-flex justify-content-center gap-3">
-            <a href="#signup" class="btn btn-primary btn-lg" id="signup-link">Inizia Gratuitamente</a>
-            <a href="#demo" class="btn btn-success btn-lg" id="demo-link">Richiedi una Demo</a>
+  <div class="container mt-4">
+    <h1 class="text-center mb-4">Scanner Sicurezza Web</h1>
+    
+    <div class="scanner-container">
+      <form id="scan-form">
+        <div class="mb-3">
+          <label for="url" class="form-label">URL del sito da scansionare</label>
+          <div class="input-group">
+            <input type="url" class="form-control" id="url" placeholder="https://example.com" required>
+            <button type="submit" class="btn btn-primary">Scansiona</button>
           </div>
+          <div class="form-text">Inserisci l'URL completo incluso http:// o https://</div>
         </div>
-      </section>
+      </form>
 
-      <section class="py-5" id="features">
-        <div class="container">
-          <h2 class="text-center mb-5">Funzionalità Principali</h2>
-          <div class="row">
-            <div class="col-md-4">
-              <div class="feature-card">
-                <h3>Scansione di Sicurezza</h3>
-                <p>Analizza il tuo sito web per identificare vulnerabilità di sicurezza come XSS, SQL Injection, CSRF e altre minacce comuni.</p>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="feature-card">
-                <h3>Consigli basati su AI</h3>
-                <p>Ricevi consigli personalizzati basati su intelligenza artificiale per risolvere le vulnerabilità e migliorare la sicurezza del tuo sito.</p>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="feature-card">
-                <h3>Conformità NIS2</h3>
-                <p>Verifica la conformità del tuo sito web alla direttiva NIS2 e ricevi indicazioni su come adeguarti alle normative europee sulla sicurezza informatica.</p>
-              </div>
-            </div>
-          </div>
+      <div id="loading" class="loading">
+        <div class="spinner-border text-primary mb-3" role="status">
+          <span class="visually-hidden">Caricamento...</span>
         </div>
-      </section>
-    </div>
-
-    <!-- Login Page -->
-    <div id="login-page" class="page">
-      <div class="container py-5">
-        <div class="row justify-content-center">
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="text-center">Accedi</h3>
-              </div>
-              <div class="card-body">
-                <form id="login-form">
-                  <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" required>
-                  </div>
-                  <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Accedi</button>
-                  </div>
-                </form>
-                <div class="text-center mt-3">
-                  <p>Non hai un account? <a href="#signup" id="to-signup-link">Registrati</a></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <p>Scansione in corso... Questo potrebbe richiedere alcuni minuti.</p>
       </div>
-    </div>
 
-    <!-- Signup Page -->
-    <div id="signup-page" class="page">
-      <div class="container py-5">
-        <div class="row justify-content-center">
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="text-center">Registrati</h3>
+      <div id="scan-results" style="display: none;">
+        <h3 class="text-center mb-4">Risultati della scansione</h3>
+        
+        <div class="row mb-4">
+          <div class="col-md-4">
+            <div class="card text-center p-3">
+              <h5>Punteggio di sicurezza</h5>
+              <div id="security-score" class="score-circle score-medium">75</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card text-center p-3">
+              <h5>Vulnerabilità trovate</h5>
+              <p class="display-4" id="vulnerabilities-count">3</p>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card text-center p-3">
+              <h5>Conformità NIS2</h5>
+              <p class="display-4" id="compliance-score">82%</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="vulnerabilities-list">
+          <h4>Vulnerabilità rilevate</h4>
+          
+          <div class="vulnerability-item">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5>Mancanza di protezione CSRF</h5>
+              <span class="badge bg-danger">Alta</span>
+            </div>
+            <p>Il sito non implementa protezioni contro attacchi Cross-Site Request Forgery (CSRF), rendendo vulnerabili le azioni degli utenti autenticati.</p>
+            <div class="mt-2">
+              <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#solution1">
+                Soluzione suggerita
+              </button>
+            </div>
+            <div class="collapse mt-2" id="solution1">
+              <div class="card card-body">
+                <p>Implementare token CSRF in tutti i form e nelle richieste POST. Utilizzare librerie come csurf per Express.js o implementare la validazione del token lato server.</p>
+                <pre><code>// Esempio di implementazione con Express.js
+const csrf = require('csurf');
+const csrfProtection = csrf({ cookie: true });
+
+app.use(csrfProtection);
+app.get('/form', (req, res) => {
+  res.render('form', { csrfToken: req.csrfToken() });
+});</code></pre>
               </div>
-              <div class="card-body">
-                <form id="signup-form">
-                  <div class="mb-3">
-                    <label for="name" class="form-label">Nome completo</label>
-                    <input type="text" class="form-control" id="name" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="signup-email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="signup-email" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="signup-password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="signup-password" required>
-                  </div>
-                  <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Registrati</button>
-                  </div>
-                </form>
-                <div class="text-center mt-3">
-                  <p>Hai già un account? <a href="#login" id="to-login-link">Accedi</a></p>
-                </div>
+            </div>
+          </div>
+
+          <div class="vulnerability-item">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5>Header di sicurezza mancanti</h5>
+              <span class="badge bg-warning text-dark">Media</span>
+            </div>
+            <p>Il sito non implementa header HTTP di sicurezza importanti come Content-Security-Policy, X-Content-Type-Options e X-Frame-Options.</p>
+            <div class="mt-2">
+              <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#solution2">
+                Soluzione suggerita
+              </button>
+            </div>
+            <div class="collapse mt-2" id="solution2">
+              <div class="card card-body">
+                <p>Aggiungere i seguenti header HTTP alle risposte del server:</p>
+                <pre><code>// Esempio di implementazione con Express.js
+app.use(function(req, res, next) {
+  res.setHeader('Content-Security-Policy', "default-src 'self'");
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  next();
+});</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="vulnerability-item">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5>Versione obsoleta di jQuery</h5>
+              <span class="badge bg-info text-dark">Bassa</span>
+            </div>
+            <p>Il sito utilizza jQuery 1.12.4, che contiene vulnerabilità note. Si consiglia di aggiornare all'ultima versione.</p>
+            <div class="mt-2">
+              <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#solution3">
+                Soluzione suggerita
+              </button>
+            </div>
+            <div class="collapse mt-2" id="solution3">
+              <div class="card card-body">
+                <p>Aggiornare la versione di jQuery all'ultima versione stabile:</p>
+                <pre><code>&lt;script src="https://code.jquery.com/jquery-3.7.0.min.js"&gt;&lt;/script&gt;</code></pre>
+                <p>Verificare che tutte le funzionalità esistenti continuino a funzionare dopo l'aggiornamento.</p>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Demo Page -->
-    <div id="demo-page" class="page">
-      <div class="container py-5">
-        <div class="row justify-content-center">
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-header">
-                <h3 class="text-center">Richiedi una Demo</h3>
-              </div>
-              <div class="card-body">
-                <form id="demo-form">
-                  <div class="mb-3">
-                    <label for="company" class="form-label">Nome azienda</label>
-                    <input type="text" class="form-control" id="company" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="demo-email" class="form-label">Email aziendale</label>
-                    <input type="email" class="form-control" id="demo-email" required>
-                  </div>
-                  <div class="mb-3">
-                    <label for="phone" class="form-label">Telefono</label>
-                    <input type="tel" class="form-control" id="phone" required>
-                  </div>
-                  <div class="d-grid">
-                    <button type="submit" class="btn btn-success">Richiedi Demo</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
+        <div class="mt-4 text-center">
+          <button id="generate-report" class="btn btn-success me-2">Genera Report PDF</button>
+          <button id="get-ai-advice" class="btn btn-primary">Ottieni Consigli AI</button>
         </div>
       </div>
     </div>
   </div>
 
-  <footer class="bg-dark text-white py-4 mt-5">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-4">
-          <h5>Dev Scan Security</h5>
-          <p>La piattaforma per la scansione di sicurezza dei siti web e la conformità NIS2.</p>
-        </div>
-        <div class="col-md-4">
-          <h5>Link Utili</h5>
-          <ul class="list-unstyled">
-            <li><a href="#features" class="text-white">Funzionalità</a></li>
-            <li><a href="#pricing" class="text-white">Prezzi</a></li>
-            <li><a href="#about" class="text-white">Chi Siamo</a></li>
-            <li><a href="#contact" class="text-white">Contatti</a></li>
-          </ul>
-        </div>
-        <div class="col-md-4">
-          <h5>Contatti</h5>
-          <ul class="list-unstyled">
-            <li><a href="mailto:info@devscan.security" class="text-white">info@devscan.security</a></li>
-            <li><a href="tel:+390123456789" class="text-white">+39 012 345 6789</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="text-center mt-4">
-        <p class="mb-0">&copy; 2025 Dev Scan Security. Tutti i diritti riservati.</p>
-      </div>
+  <footer class="bg-dark text-white py-3 mt-5">
+    <div class="container text-center">
+      <p class="mb-0">&copy; 2025 Dev Scan Security. Tutti i diritti riservati.</p>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Hide all pages initially
-      const pages = document.querySelectorAll('.page');
-      pages.forEach(page => page.style.display = 'none');
+      const scanForm = document.getElementById('scan-form');
+      const loadingDiv = document.getElementById('loading');
+      const resultsDiv = document.getElementById('scan-results');
+      const generateReportBtn = document.getElementById('generate-report');
+      const getAiAdviceBtn = document.getElementById('get-ai-advice');
       
-      // Function to show a specific page
-      function showPage(pageId) {
-        pages.forEach(page => page.style.display = 'none');
-        document.getElementById(pageId).style.display = 'block';
-      }
-      
-      // Handle hash changes
-      function handleHashChange() {
-        const hash = window.location.hash.substring(1) || 'home';
+      // Handle form submission
+      scanForm.addEventListener('submit', function(e) {
+        e.preventDefault();
         
-        if (hash === 'login') {
-          showPage('login-page');
-        } else if (hash === 'signup') {
-          showPage('signup-page');
-        } else if (hash === 'demo') {
-          showPage('demo-page');
-        } else {
-          showPage('home-page');
-        }
-      }
-      
-      // Initial page load
-      handleHashChange();
-      
-      // Listen for hash changes
-      window.addEventListener('hashchange', handleHashChange);
-      
-      // Handle form submissions
-      document.getElementById('login-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('Funzionalità di login in fase di sviluppo');
+        const url = document.getElementById('url').value;
+        if (!url) return;
+        
+        // Show loading
+        loadingDiv.style.display = 'block';
+        resultsDiv.style.display = 'none';
+        
+        // Simulate API call
+        setTimeout(function() {
+          // Hide loading and show results
+          loadingDiv.style.display = 'none';
+          resultsDiv.style.display = 'block';
+          
+          // In a real app, you would call your Cloud Function here:
+          // fetch('https://us-central1-dev-scan-security.cloudfunctions.net/scanWebsite', {
+          //   method: 'POST',
+          //   headers: { 'Content-Type': 'application/json' },
+          //   body: JSON.stringify({ url: url })
+          // })
+          // .then(response => response.json())
+          // .then(data => {
+          //   // Update UI with scan results
+          // })
+          // .catch(error => {
+          //   console.error('Error:', error);
+          // });
+          
+        }, 3000); // Simulate 3 second API call
       });
       
-      document.getElementById('signup-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('Funzionalità di registrazione in fase di sviluppo');
+      // Handle generate report button
+      generateReportBtn.addEventListener('click', function() {
+        alert('Generazione del report in corso. Il PDF sarà pronto a breve.');
+        // In a real app, you would call your Cloud Function here:
+        // fetch('https://us-central1-dev-scan-security.cloudfunctions.net/generateReport', {...})
       });
       
-      document.getElementById('demo-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('La tua richiesta di demo è stata inviata con successo!');
-        window.location.hash = '';
+      // Handle AI advice button
+      getAiAdviceBtn.addEventListener('click', function() {
+        alert('Analisi AI in corso. I consigli personalizzati saranno disponibili a breve.');
+        // In a real app, you would call your Cloud Function here:
+        // fetch('https://us-central1-dev-scan-security.cloudfunctions.net/getAiAdvice', {...})
       });
     });
   </script>
