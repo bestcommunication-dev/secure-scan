@@ -28,11 +28,11 @@ jobs:
       - name: Display package.json
         run: cat package.json
       
-      - name: Build
-        run: npm run build
+      - name: Skip build (using static files)
+        run: echo "Skipping build step and using static files from simple-app directory"
       
-      - name: List dist directory
-        run: ls -la dist || echo "dist directory not found"
+      - name: List simple-app directory
+        run: ls -la simple-app
       
       - name: Deploy to Firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
