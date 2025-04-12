@@ -20,8 +20,8 @@ function Router() {
       <Route path="/login" component={Login} />
       <Route path="/signup" component={Login} />
 
-      {/* Temporary solution: all routes are accessible without login */}
-      <Route path="/" component={Dashboard} />
+      {/* Scanner come pagina principale */}
+      <Route path="/" component={Scanner} />
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/scanner" component={Scanner} />
       <Route path="/reports" component={Reports} />
