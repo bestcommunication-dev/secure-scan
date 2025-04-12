@@ -7,15 +7,35 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache: 'npm'
+      
+      - name: List directory contents (before)
+        run: ls -la
+      
       - name: Install dependencies
         run: npm ci
+      
+      - name: List directory contents (after npm ci)
+        run: ls -la
+      
+      - name: Display package.json
+        run: cat package.json
+      
       - name: Build
         run: npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      
+      - name: List dist directory
+        run: ls -la dist || echo "dist directory not found"
+      
+      - name: Deploy to Firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_DEV_SCAN_SECURITY }}'
